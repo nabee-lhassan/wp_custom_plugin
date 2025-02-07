@@ -8,6 +8,24 @@
  * Domain Path: /languages
  */
 
+// Add a menu in the WordPress dashboard
+add_action('admin_menu', 'custom_fields_admin_menu');
+function custom_fields_admin_menu() {
+    add_menu_page(
+        'Custom Fields',
+        'Custom Fields',
+        'manage_options',
+        'custom-fields-settings',
+        'custom_fields_settings_page',
+        'dashicons-admin-generic',
+        25
+    );
+}
+
+function custom_fields_settings_page() {
+    echo '<div class="wrap"><h1>Custom Fields Settings</h1></div>';
+}
+
 // Add a category selection field in product settings
 add_action('woocommerce_product_options_general_product_data', 'add_category_selection_field');
 function add_category_selection_field() {
@@ -129,75 +147,4 @@ function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
             $item->add_meta_data(ucfirst(str_replace('_', ' ', $key)), $value);
         }
     }
-}
-
-
-
-// ***************************************************
-
-
-// Add a menu item in the WordPress admin sidebar
-add_action('admin_menu', 'add_custom_fields_menu');
-
-function add_custom_fields_menu() {
-    add_menu_page(
-        __('Custom Fields Settings', 'woocommerce-custom-fields'),
-        __('Custom Fields', 'woocommerce-custom-fields'),
-        'manage_options',
-        'custom-fields-settings',
-        'custom_fields_settings_page',
-        'dashicons-admin-generic',
-        56
-    );
-}
-
-// Callback function to display settings page content
-function custom_fields_settings_page() {
-    ?>
-    <div class="wrap">
-        <h1><?php _e('Custom Fields Settings', 'woocommerce-custom-fields'); ?></h1>
-        <form method="post" action="options.php">
-            <?php
-            settings_fields('custom_fields_settings_group');
-            do_settings_sections('custom-fields-settings');
-            submit_button();
-            ?>
-        </form>
-    </div>
-    <?php
-}
-
-// Register settings
-add_action('admin_init', 'register_custom_fields_settings');
-
-function register_custom_fields_settings() {
-    register_setting('custom_fields_settings_group', 'enabled_categories');
-
-    add_settings_section(
-        'custom_fields_main_section',
-        __('Select Categories for Custom Fields', 'woocommerce-custom-fields'),
-        null,
-        'custom-fields-settings'
-    );
-
-    add_settings_field(
-        'enabled_categories_field',
-        __('Enabled Categories', 'woocommerce-custom-fields'),
-        'enabled_categories_callback',
-        'custom-fields-settings',
-        'custom_fields_main_section'
-    );
-}
-
-// Display category selection field in settings
-function enabled_categories_callback() {
-    $selected_categories = get_option('enabled_categories', []);
-    $categories = get_terms('product_cat', ['hide_empty' => false]);
-
-    echo '<select name="enabled_categories[]" multiple style="width: 100%; height: 150px;">';
-    foreach ($categories as $category) {
-        $selected = in_array($category->slug, (array) $selected_categories) ? 'selected' : '';
-        echo '<option value="' . esc_attr($category->slug) . '" ' . $selected . '>' . esc_html($category->name) . '</option>';
-    }
-    echo '</select>';
 }
