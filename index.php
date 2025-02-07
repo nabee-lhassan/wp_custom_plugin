@@ -68,20 +68,10 @@ function add_custom_fields_to_product_page() {
 // Add custom field values to the cart
 add_filter( 'woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2 );
 function save_custom_fields_to_cart( $cart_item_data, $product_id ) {
-    if( isset( $_POST['custom_message'] ) ) {
-        $cart_item_data['custom_message'] = sanitize_text_field( $_POST['custom_message'] );
-    }
-    if( isset( $_POST['team_name'] ) ) {
-        $cart_item_data['team_name'] = sanitize_text_field( $_POST['team_name'] );
-    }
-    if( isset( $_POST['player_size'] ) ) {
-        $cart_item_data['player_size'] = sanitize_text_field( $_POST['player_size'] );
-    }
-    if( isset( $_POST['player_name'] ) ) {
-        $cart_item_data['player_name'] = sanitize_text_field( $_POST['player_name'] );
-    }
-    if( isset( $_POST['player_number'] ) ) {
-        $cart_item_data['player_number'] = sanitize_text_field( $_POST['player_number'] );
+    foreach ($_POST as $key => $value) {
+        if (!empty($value)) {
+            $cart_item_data[$key] = sanitize_text_field($value);
+        }
     }
     return $cart_item_data;
 }
@@ -89,37 +79,23 @@ function save_custom_fields_to_cart( $cart_item_data, $product_id ) {
 // Display custom fields in the cart
 add_filter( 'woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2 );
 function display_custom_fields_in_cart( $item_data, $cart_item ) {
-    if( isset( $cart_item['player_size'] ) ) {
-        $item_data[] = array(
-            'name' => 'Player Size',
-            'value' => ucfirst($cart_item['player_size'])
-        );
-    }
-    if( isset( $cart_item['player_name'] ) ) {
-        $item_data[] = array(
-            'name' => 'Player Name',
-            'value' => $cart_item['player_name']
-        );
-    }
-    if( isset( $cart_item['player_number'] ) ) {
-        $item_data[] = array(
-            'name' => 'Player Number',
-            'value' => $cart_item['player_number']
-        );
+    foreach ($cart_item as $key => $value) {
+        if (!in_array($key, ['product_id', 'quantity']) && !empty($value)) {
+            $item_data[] = array(
+                'name' => ucfirst(str_replace('_', ' ', $key)),
+                'value' => $value
+            );
+        }
     }
     return $item_data;
 }
 
-// Display custom field values in the checkout
+// Display custom field values in the checkout and order
 add_action( 'woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_order', 10, 4 );
 function add_custom_fields_to_order( $item, $cart_item_key, $values, $order ) {
-    if( isset( $values['player_size'] ) ) {
-        $item->add_meta_data( 'Player Size', ucfirst($values['player_size']) );
-    }
-    if( isset( $values['player_name'] ) ) {
-        $item->add_meta_data( 'Player Name', $values['player_name'] );
-    }
-    if( isset( $values['player_number'] ) ) {
-        $item->add_meta_data( 'Player Number', $values['player_number'] );
+    foreach ($values as $key => $value) {
+        if (!in_array($key, ['product_id', 'quantity']) && !empty($value)) {
+            $item->add_meta_data( ucfirst(str_replace('_', ' ', $key)), $value );
+        }
     }
 }
