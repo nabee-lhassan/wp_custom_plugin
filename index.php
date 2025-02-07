@@ -52,7 +52,7 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<div class="custom-field">
-            <label for="team_name">Team Name</label>
+            <label for="team_name">Team Name here</label>
             <input type="text" id="team_name" name="team_name" />
           </div>';
     
