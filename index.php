@@ -100,8 +100,9 @@ function save_custom_fields_to_cart( $cart_item_data, $product_id ) {
 // Display custom fields in the cart
 add_filter( 'woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2 );
 function display_custom_fields_in_cart( $item_data, $cart_item ) {
+    $excluded_keys = ['variation_id', 'key', 'data_hash', 'line_tax_data', 'line_subtotal', 'line_total', 'data'];
     foreach ($cart_item as $key => $value) {
-        if (!in_array($key, ['product_id', 'quantity']) && !empty($value)) {
+        if (!in_array($key, $excluded_keys) && !empty($value)) {
             $item_data[] = array(
                 'name' => ucfirst(str_replace('_', ' ', $key)),
                 'value' => is_array($value) ? implode(', ', $value) : $value
@@ -114,8 +115,9 @@ function display_custom_fields_in_cart( $item_data, $cart_item ) {
 // Display custom field values in the checkout and order
 add_action( 'woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_order', 10, 4 );
 function add_custom_fields_to_order( $item, $cart_item_key, $values, $order ) {
+    $excluded_keys = ['variation_id', 'key', 'data_hash', 'line_tax_data', 'line_subtotal', 'line_total', 'data'];
     foreach ($values as $key => $value) {
-        if (!in_array($key, ['product_id', 'quantity']) && !empty($value)) {
+        if (!in_array($key, $excluded_keys) && !empty($value)) {
             $item->add_meta_data( ucfirst(str_replace('_', ' ', $key)), $value );
         }
     }
