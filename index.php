@@ -22,22 +22,35 @@ function add_custom_fields_to_product_page() {
             <input type="text" id="team_name" name="team_name" />
           </div>';
     
-    // Dropdown to select number of players
-    echo '<div class="custom-field">
-            <label for="player_count">Number of Players</label>
-            <select id="player_count" name="player_count" onchange="generatePlayerFields()">
-                <option value="">Select</option>';
-    for ($i = 1; $i <= 30; $i++) {
-        echo '<option value="'.$i.'">'.$i.'</option>';
-    }
-    echo '</select></div>';
-    
     // Player Information Section
     echo '<fieldset class="custom-field" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
-            <legend><strong>Player Information</strong></legend>
-            <div id="player_fields"></div>
-          </fieldset>';
+            <legend><strong>Player Information</strong></legend>';
     
+    // Loop for 30 players
+    for ($i = 1; $i <= 30; $i++) {
+        echo '<div class="player-group">
+                <label for="player_size_'.$i.'">Player '.$i.' Size</label>
+                <select id="player_size_'.$i.'" name="player_size_'.$i.'">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="extra_large">Extra Large</option>
+                </select>
+              </div>';
+    
+        echo '<div class="player-group">
+                <label for="player_name_'.$i.'">Player '.$i.' Name</label>
+                <input type="text" id="player_name_'.$i.'" name="player_name_'.$i.'" />
+              </div>';
+    
+        echo '<div class="player-group">
+                <label for="player_number_'.$i.'">Player '.$i.' Number</label>
+                <input type="text" id="player_number_'.$i.'" name="player_number_'.$i.'" />
+              </div>';
+    }
+    
+    echo '</fieldset>'; // End of Player Information Section
+
     // Logo Upload Field
     echo '<div class="custom-field">
             <label for="logo_upload">Logo (Upload)</label>
@@ -52,30 +65,6 @@ function add_custom_fields_to_product_page() {
                 <option value="sponsor_image">Sponsor Image</option>
             </select>
           </div>';
-    
-    // JavaScript to dynamically generate player fields
-    echo '<script>
-            function generatePlayerFields() {
-                var count = document.getElementById("player_count").value;
-                var container = document.getElementById("player_fields");
-                container.innerHTML = "";
-                for (var i = 1; i <= count; i++) {
-                    container.innerHTML += '<div class="player-group" style="display:flex; gap:10px; margin-bottom:5px;">'
-                        + '<label>Player ' + i + ' Size</label>'
-                        + '<select name="player_size_' + i + '">'
-                        + '<option value="small">Small</option>'
-                        + '<option value="medium">Medium</option>'
-                        + '<option value="large">Large</option>'
-                        + '<option value="extra_large">Extra Large</option>'
-                        + '</select>'
-                        + '<label>Player ' + i + ' Name</label>'
-                        + '<input type="text" name="player_name_' + i + '" />'
-                        + '<label>Player ' + i + ' Number</label>'
-                        + '<input type="text" name="player_number_' + i + '" />'
-                        + '</div>';
-                }
-            }
-          </script>';
 }
 
 // Add custom field values to the cart
