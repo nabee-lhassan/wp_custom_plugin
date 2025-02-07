@@ -26,26 +26,28 @@ function add_custom_fields_to_product_page() {
     echo '<fieldset class="custom-field" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
             <legend><strong>Player Information</strong></legend>';
     
-    // Player Group Fields
-    echo '<div class="player-group">
-            <label for="player_size">Size</label>
-            <select id="player_size" name="player_size">
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-                <option value="extra_large">Extra Large</option>
-            </select>
-          </div>';
+    // Loop for 30 players
+    for ($i = 1; $i <= 30; $i++) {
+        echo '<div class="player-group">
+                <label for="player_size_'.$i.'">Player '.$i.' Size</label>
+                <select id="player_size_'.$i.'" name="player_size_'.$i.'">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="extra_large">Extra Large</option>
+                </select>
+              </div>';
     
-    echo '<div class="player-group">
-            <label for="player_name">Player Name</label>
-            <input type="text" id="player_name" name="player_name" />
-          </div>';
-
-    echo '<div class="player-group">
-            <label for="player_number">Player Number</label>
-            <input type="text" id="player_number" name="player_number" />
-          </div>';
+        echo '<div class="player-group">
+                <label for="player_name_'.$i.'">Player '.$i.' Name</label>
+                <input type="text" id="player_name_'.$i.'" name="player_name_'.$i.'" />
+              </div>';
+    
+        echo '<div class="player-group">
+                <label for="player_number_'.$i.'">Player '.$i.' Number</label>
+                <input type="text" id="player_number_'.$i.'" name="player_number_'.$i.'" />
+              </div>';
+    }
     
     echo '</fieldset>'; // End of Player Information Section
 
