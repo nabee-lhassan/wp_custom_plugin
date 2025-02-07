@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
  * Version: 1.4
- * Author: Your Name
+ * Author: Nabeel Hassa 
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
  */
