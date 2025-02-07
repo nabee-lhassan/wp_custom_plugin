@@ -41,7 +41,7 @@ function add_custom_fields_to_product_page() {
     // Logo Upload Field
     echo '<div class="custom-field">
             <label for="logo_upload">Logo (Upload)</label>
-            <input type="file" id="logo_upload" name="logo_upload" />
+            <input type="file" id="logo_upload" name="logo_upload" accept="image/*" />
           </div>';
     
     // Sponsor Option Field
@@ -60,19 +60,19 @@ function add_custom_fields_to_product_page() {
                 var container = document.getElementById("player_fields");
                 container.innerHTML = "";
                 for (var i = 1; i <= count; i++) {
-                    container.innerHTML += '<div class="player-group" style="display:flex; gap:10px; margin-bottom:5px;">'
-                        + '<label>Player ' + i + ' Size</label>'
-                        + '<select name="player_size_' + i + '">'
-                        + '<option value="small">Small</option>'
-                        + '<option value="medium">Medium</option>'
-                        + '<option value="large">Large</option>'
-                        + '<option value="extra_large">Extra Large</option>'
-                        + '</select>'
-                        + '<label>Player ' + i + ' Name</label>'
-                        + '<input type="text" name="player_name_' + i + '" />'
-                        + '<label>Player ' + i + ' Number</label>'
-                        + '<input type="text" name="player_number_' + i + '" />'
-                        + '</div>';
+                    container.innerHTML += `<div class="player-group" style="display:flex; gap:10px; margin-bottom:5px;">
+                        <label>Player ${i} Size</label>
+                        <select name="player_size_${i}">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                            <option value="extra_large">Extra Large</option>
+                        </select>
+                        <label>Player ${i} Name</label>
+                        <input type="text" name="player_name_${i}" />
+                        <label>Player ${i} Number</label>
+                        <input type="text" name="player_number_${i}" />
+                    </div>`;
                 }
             }
           </script>';
@@ -82,8 +82,16 @@ function add_custom_fields_to_product_page() {
 add_filter( 'woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2 );
 function save_custom_fields_to_cart( $cart_item_data, $product_id ) {
     foreach ($_POST as $key => $value) {
-        if (!empty($value)) {
+        if (!empty($value) && $key !== 'logo_upload') {
             $cart_item_data[$key] = sanitize_text_field($value);
+        }
+    }
+    
+    // Handle file upload
+    if (!empty($_FILES['logo_upload']['name'])) {
+        $upload = wp_handle_upload($_FILES['logo_upload'], ['test_form' => false]);
+        if ($upload && !isset($upload['error'])) {
+            $cart_item_data['logo_upload'] = $upload['url'];
         }
     }
     return $cart_item_data;
@@ -96,7 +104,7 @@ function display_custom_fields_in_cart( $item_data, $cart_item ) {
         if (!in_array($key, ['product_id', 'quantity']) && !empty($value)) {
             $item_data[] = array(
                 'name' => ucfirst(str_replace('_', ' ', $key)),
-                'value' => $value
+                'value' => is_array($value) ? implode(', ', $value) : $value
             );
         }
     }
