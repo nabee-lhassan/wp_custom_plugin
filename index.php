@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.9
+ * Version: 2.0
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -28,13 +28,15 @@ function custom_fields_settings_page() {
     echo '<p>Select product categories where custom fields should appear.</p>';
     
     $categories = get_terms('product_cat', ['hide_empty' => false]);
+    $selected_category = get_option('custom_fields_enabled_category');
+    
     echo '<form method="post">';
     wp_nonce_field('custom_fields_save_action', 'custom_fields_nonce');
     echo '<label for="custom_fields_category">Select Category:</label>';
     echo '<select name="custom_fields_category" id="custom_fields_category">';
     echo '<option value="">Select a Category</option>';
     foreach ($categories as $category) {
-        $selected = get_option('custom_fields_enabled_category') == $category->slug ? 'selected' : '';
+        $selected = ($selected_category == $category->slug) ? 'selected' : '';
         echo '<option value="' . esc_attr($category->slug) . '" ' . $selected . '>' . esc_html($category->name) . '</option>';
     }
     echo '</select>';
@@ -48,7 +50,6 @@ function custom_fields_settings_page() {
             delete_option('custom_fields_enabled_category');
         }
     }
-    echo '</div>';
 }
 
 // Display extra fields on the product page only if the category matches
@@ -77,20 +78,22 @@ function add_custom_fields_to_product_page() {
     echo '<div id="players_info"></div>';
     
     echo '<script>
-    document.getElementById("num_players").addEventListener("change", function() {
-        var count = this.value;
-        var container = document.getElementById("players_info");
-        container.innerHTML = "";
-        for (var i = 1; i <= count; i++) {
-            container.innerHTML += `<div class="player-field">
-                <label>Player ` + i + ` Name</label>
-                <input type="text" name="custom_player_` + i + `_name" />
-                <label>Number</label>
-                <input type="text" name="custom_player_` + i + `_number" />
-                <label>Size</label>
-                <input type="text" name="custom_player_` + i + `_size" />
-            </div>`;
-        }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("num_players").addEventListener("change", function() {
+            var count = this.value;
+            var container = document.getElementById("players_info");
+            container.innerHTML = "";
+            for (var i = 1; i <= count; i++) {
+                container.innerHTML += `<div class="player-field">
+                    <label>Player ` + i + ` Name</label>
+                    <input type="text" name="custom_player_` + i + `_name" />
+                    <label>Number</label>
+                    <input type="text" name="custom_player_` + i + `_number" />
+                    <label>Size</label>
+                    <input type="text" name="custom_player_` + i + `_size" />
+                </div>`;
+            }
+        });
     });
     </script>';
 }
