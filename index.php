@@ -2,81 +2,66 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.5
+ * Version: 1.6
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
  */
 
-// Add a menu in the WordPress dashboard
+// Add a menu in the WordPress dashboard sidebar
 add_action('admin_menu', 'custom_fields_admin_menu');
 function custom_fields_admin_menu() {
     add_menu_page(
-        'Custom Fields',
+        'Custom Fields Settings',
         'Custom Fields',
         'manage_options',
         'custom-fields-settings',
         'custom_fields_settings_page',
         'dashicons-admin-generic',
-        25
+        26
     );
 }
 
+// Settings page for category selection
 function custom_fields_settings_page() {
     echo '<div class="wrap"><h1>Custom Fields Settings</h1>';
-    echo '<p>Configure custom fields for WooCommerce products.</p>';
+    echo '<p>Select product categories where custom fields should appear.</p>';
     
     $categories = get_terms('product_cat', ['hide_empty' => false]);
-    if (!empty($categories)) {
-        echo '<ul>';
+    echo '<form method="post">';
+    echo '<ul>';
+    foreach ($categories as $category) {
+        $checked = get_option('custom_fields_enabled_' . $category->slug) ? 'checked' : '';
+        echo '<li><input type="checkbox" name="custom_fields_enabled[' . esc_attr($category->slug) . ']" ' . $checked . '> ' . esc_html($category->name) . '</li>';
+    }
+    echo '</ul>';
+    submit_button('Save Settings');
+    echo '</form>';
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['custom_fields_enabled'])) {
         foreach ($categories as $category) {
-            echo '<li>' . esc_html($category->name) . '</li>';
+            $option_name = 'custom_fields_enabled_' . $category->slug;
+            update_option($option_name, isset($_POST['custom_fields_enabled'][$category->slug]));
         }
-        echo '</ul>';
-    } else {
-        echo '<p>No categories found.</p>';
     }
     echo '</div>';
-}
-
-// Add a category selection field in product settings
-add_action('woocommerce_product_options_general_product_data', 'add_category_selection_field');
-function add_category_selection_field() {
-    woocommerce_wp_select([
-        'id' => 'custom_fields_category_enable',
-        'label' => __('Enable Custom Fields for Category', 'woocommerce-custom-fields'),
-        'options' => get_wc_categories()
-    ]);
-}
-
-// Save the selected category
-add_action('woocommerce_process_product_meta', 'save_category_selection_field');
-function save_category_selection_field($post_id) {
-    if (isset($_POST['custom_fields_category_enable'])) {
-        update_post_meta($post_id, 'custom_fields_category_enable', sanitize_text_field($_POST['custom_fields_category_enable']));
-    }
-}
-
-// Function to fetch WooCommerce categories
-function get_wc_categories() {
-    $categories = get_terms('product_cat', ['hide_empty' => false]);
-    $options = ['' => __('Select Category', 'woocommerce-custom-fields')];
-    foreach ($categories as $category) {
-        $options[$category->slug] = $category->name;
-    }
-    return $options;
 }
 
 // Display extra fields on the product page only if the category matches
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
 function add_custom_fields_to_product_page() {
     global $post;
-    $enabled_category = get_post_meta($post->ID, 'custom_fields_category_enable', true);
     $product_cats = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'slugs']);
+    $show_fields = false;
     
-    if (!$enabled_category || !in_array($enabled_category, $product_cats)) {
-        return;
+    foreach ($product_cats as $cat) {
+        if (get_option('custom_fields_enabled_' . $cat)) {
+            $show_fields = true;
+            break;
+        }
     }
+    
+    if (!$show_fields) return;
     
     echo '<div class="custom-field">
             <label for="custom_message">Custom Message</label>
@@ -89,7 +74,7 @@ function add_custom_fields_to_product_page() {
           </div>';
 }
 
-// Add custom field values to the cart
+// Save custom fields data in the cart
 add_filter('woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2);
 function save_custom_fields_to_cart($cart_item_data, $product_id) {
     foreach ($_POST as $key => $value) {
