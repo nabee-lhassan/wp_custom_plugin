@@ -67,6 +67,12 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<div class="custom-field">
+            <label for="brand_logo">Brand Logo</label>
+            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
+            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
+          </div>';
+    
+    echo '<div class="custom-field">
             <label for="front_shorts_number">Front - Number (Shorts Number):</label>
             <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
           </div>';
@@ -79,13 +85,6 @@ function add_custom_fields_to_product_page() {
     echo '<div class="custom-field">
             <label for="back_number">Back - Number:</label>
             <input type="text" id="back_number" name="custom_back_number" />
-          </div>';
-    
-    // Moved the brand logo field to the last
-    echo '<div class="custom-field">
-            <label for="brand_logo">Brand Logo</label>
-            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
-            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
           </div>';
     
     echo '<script>
@@ -118,7 +117,9 @@ add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
     foreach ($cart_item as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $item_data[] = ['name' => ucfirst(str_replace('_', ' ', $key)), 'value' => $value];
+            // Remove the 'custom_' prefix from the field label
+            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));  // Remove 'custom_' and format label
+            $item_data[] = ['name' => $label, 'value' => $value];
         }
     }
     return $item_data;
@@ -129,8 +130,9 @@ add_action('woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_
 function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
     foreach ($values as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $item->add_meta_data(ucfirst(str_replace('_', ' ', $key)), $value);
+            // Remove the 'custom_' prefix from the field label
+            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));  // Remove 'custom_' and format label
+            $item->add_meta_data($label, $value);
         }
     }
 }
-?>
