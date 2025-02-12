@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.4
+ * Version: 1.5
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -23,7 +23,20 @@ function custom_fields_admin_menu() {
 }
 
 function custom_fields_settings_page() {
-    echo '<div class="wrap"><h1>Custom Fields Settings</h1></div>';
+    echo '<div class="wrap"><h1>Custom Fields Settings</h1>';
+    echo '<p>Configure custom fields for WooCommerce products.</p>';
+    
+    $categories = get_terms('product_cat', ['hide_empty' => false]);
+    if (!empty($categories)) {
+        echo '<ul>';
+        foreach ($categories as $category) {
+            echo '<li>' . esc_html($category->name) . '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No categories found.</p>';
+    }
+    echo '</div>';
 }
 
 // Add a category selection field in product settings
@@ -39,8 +52,9 @@ function add_category_selection_field() {
 // Save the selected category
 add_action('woocommerce_process_product_meta', 'save_category_selection_field');
 function save_category_selection_field($post_id) {
-    $category = isset($_POST['custom_fields_category_enable']) ? sanitize_text_field($_POST['custom_fields_category_enable']) : '';
-    update_post_meta($post_id, 'custom_fields_category_enable', $category);
+    if (isset($_POST['custom_fields_category_enable'])) {
+        update_post_meta($post_id, 'custom_fields_category_enable', sanitize_text_field($_POST['custom_fields_category_enable']));
+    }
 }
 
 // Function to fetch WooCommerce categories
@@ -73,43 +87,6 @@ function add_custom_fields_to_product_page() {
             <label for="team_name">Team Name</label>
             <input type="text" id="team_name" name="team_name" />
           </div>';
-    
-    echo '<div class="custom-field">
-            <label for="player_count">Number of Players</label>
-            <select id="player_count" name="player_count" onchange="generatePlayerFields()">
-                <option value="">Select</option>';
-    for ($i = 1; $i <= 30; $i++) {
-        echo '<option value="'.$i.'">'.$i.'</option>';
-    }
-    echo '</select></div>';
-    
-    echo '<fieldset class="custom-field" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
-            <legend><strong>Player Information</strong></legend>
-            <div id="player_fields"></div>
-          </fieldset>';
-    
-    echo '<script>
-            function generatePlayerFields() {
-                var count = document.getElementById("player_count").value;
-                var container = document.getElementById("player_fields");
-                container.innerHTML = "";
-                for (var i = 1; i <= count; i++) {
-                    container.innerHTML += `<div class="player-group" style="display:flex; gap:10px; margin-bottom:5px;">
-                        <label>Player ${i} Size</label>
-                        <select name="player_size_${i}">
-                            <option value="small">Small</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large</option>
-                            <option value="extra_large">Extra Large</option>
-                        </select>
-                        <label>Player ${i} Name</label>
-                        <input type="text" name="player_name_${i}" />
-                        <label>Player ${i} Number</label>
-                        <input type="text" name="player_number_${i}" />
-                    </div>`;
-                }
-            }
-          </script>';
 }
 
 // Add custom field values to the cart
@@ -126,13 +103,9 @@ function save_custom_fields_to_cart($cart_item_data, $product_id) {
 // Display custom fields in the cart
 add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
-    $excluded_keys = ['variation_id', 'key', 'data_hash', 'line_tax_data', 'line_subtotal', 'line_total', 'data'];
     foreach ($cart_item as $key => $value) {
-        if (!in_array($key, $excluded_keys) && !empty($value)) {
-            $item_data[] = [
-                'name' => ucfirst(str_replace('_', ' ', $key)),
-                'value' => is_array($value) ? implode(', ', $value) : $value
-            ];
+        if (!empty($value) && strpos($key, 'custom_') === 0) {
+            $item_data[] = ['name' => ucfirst(str_replace('_', ' ', $key)), 'value' => $value];
         }
     }
     return $item_data;
@@ -141,9 +114,8 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
 // Add custom fields to order
 add_action('woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_order', 10, 4);
 function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
-    $excluded_keys = ['variation_id', 'key', 'data_hash', 'line_tax_data', 'line_subtotal', 'line_total', 'data'];
     foreach ($values as $key => $value) {
-        if (!in_array($key, $excluded_keys) && !empty($value)) {
+        if (!empty($value) && strpos($key, 'custom_') === 0) {
             $item->add_meta_data(ucfirst(str_replace('_', ' ', $key)), $value);
         }
     }
