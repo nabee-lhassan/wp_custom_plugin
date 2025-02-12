@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 2.0
+ * Version: 2.1
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -77,22 +77,44 @@ function add_custom_fields_to_product_page() {
     
     echo '<div id="players_info"></div>';
     
+    // New Fields
+    echo '<div class="custom-field">
+            <label for="player_number_option">Player Number Option</label>
+            <select id="player_number_option" name="custom_player_number_option">
+                <option value="Both Sides">Both Sides</option>
+                <option value="Only Back Number">Only Back Number</option>
+                <option value="Only Front Number">Only Front Number</option>
+            </select>
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="brand_logo">Brand Logo</label>
+            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
+            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="sponsor_option">Sponsor Option</label>
+            <select id="sponsor_option" name="custom_sponsor_option">
+                <option value="Sponsor Text">Sponsor Text</option>
+                <option value="Sponsor Image">Sponsor Image</option>
+            </select>
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="special_requirements">Special Requirements and Additional Notes</label>
+            <textarea id="special_requirements" name="custom_special_requirements"></textarea>
+          </div>';
+    
     echo '<script>
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("num_players").addEventListener("change", function() {
-            var count = this.value;
-            var container = document.getElementById("players_info");
-            container.innerHTML = "";
-            for (var i = 1; i <= count; i++) {
-                container.innerHTML += `<div class="player-field">
-                    <label>Player ` + i + ` Name</label>
-                    <input type="text" name="custom_player_` + i + `_name" />
-                    <label>Number</label>
-                    <input type="text" name="custom_player_` + i + `_number" />
-                    <label>Size</label>
-                    <input type="text" name="custom_player_` + i + `_size" />
-                </div>`;
-            }
+        document.getElementById("brand_logo").addEventListener("change", function(event) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("brand_logo_preview").src = e.target.result;
+                document.getElementById("brand_logo_preview").style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
         });
     });
     </script>';
