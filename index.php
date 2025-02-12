@@ -67,11 +67,6 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<div class="custom-field">
-            <label for="special_requirements">Special Requirements and Additional Notes</label>
-            <textarea id="special_requirements" name="custom_special_requirements"></textarea>
-          </div>';
-    
-    echo '<div class="custom-field">
             <label for="front_shorts_number">Front - Number (Shorts Number):</label>
             <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
           </div>';
