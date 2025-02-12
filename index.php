@@ -69,7 +69,7 @@ function add_custom_fields_to_product_page() {
     if (!in_array($enabled_category, $product_cats)) return;
     
     echo '<div class="size-chart-button">
-            <button id="size_chart_button" style="background-color: black; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</button>
+            <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</div>
           </div>
           
           <script>
