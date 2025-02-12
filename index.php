@@ -66,30 +66,10 @@ function add_custom_fields_to_product_page() {
             <input type="text" id="team_name" name="custom_team_name" />
           </div>';
     
-    echo '<div id="players_info"></div>';
-    
-    // New Fields
-    echo '<div class="custom-field">
-            <label for="player_number_option">Player Number Option</label>
-            <select id="player_number_option" name="custom_player_number_option">
-                <option value="Both Sides">Both Sides</option>
-                <option value="Only Back Number">Only Back Number</option>
-                <option value="Only Front Number">Only Front Number</option>
-            </select>
-          </div>';
-    
     echo '<div class="custom-field">
             <label for="brand_logo">Brand Logo</label>
             <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
             <img id="brand_logo_preview" style="max-width:100px; display:none;" />
-          </div>';
-    
-    echo '<div class="custom-field">
-            <label for="sponsor_option">Sponsor Option</label>
-            <select id="sponsor_option" name="custom_sponsor_option">
-                <option value="Sponsor Text">Sponsor Text</option>
-                <option value="Sponsor Image">Sponsor Image</option>
-            </select>
           </div>';
     
     echo '<div class="custom-field">
