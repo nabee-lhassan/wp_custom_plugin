@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.7
+ * Version: 1.8
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -38,10 +38,14 @@ function custom_fields_settings_page() {
     submit_button('Save Settings');
     echo '</form>';
     
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['custom_fields_enabled'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($categories as $category) {
             $option_name = 'custom_fields_enabled_' . $category->slug;
-            update_option($option_name, isset($_POST['custom_fields_enabled'][$category->slug]));
+            if (isset($_POST['custom_fields_enabled'][$category->slug])) {
+                update_option($option_name, true);
+            } else {
+                delete_option($option_name);
+            }
         }
     }
     echo '</div>';
