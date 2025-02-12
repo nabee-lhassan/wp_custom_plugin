@@ -62,7 +62,7 @@ function add_custom_fields_to_product_page() {
     if (!in_array($enabled_category, $product_cats)) return;
     
     echo '<div class="custom-field">
-            <label for="team_name">Team Name</label>
+            <label for="team_name">Front - Team Name:</label>
             <input type="text" id="team_name" name="custom_team_name" />
           </div>';
     
@@ -75,6 +75,21 @@ function add_custom_fields_to_product_page() {
     echo '<div class="custom-field">
             <label for="special_requirements">Special Requirements and Additional Notes</label>
             <textarea id="special_requirements" name="custom_special_requirements"></textarea>
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="front_shorts_number">Front - Number (Shorts Number):</label>
+            <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="back_your_name">Back - Your Name:</label>
+            <input type="text" id="back_your_name" name="custom_back_your_name" />
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="back_number">Back - Number:</label>
+            <input type="text" id="back_number" name="custom_back_number" />
           </div>';
     
     echo '<script>
