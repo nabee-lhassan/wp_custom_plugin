@@ -52,12 +52,12 @@ function custom_fields_settings_page() {
     }
 }
 
-// Display extra fields on the product page only if the category matches
-add_action('woocommerce_before_single_product', 'add_size_chart_button', 5);
-function add_size_chart_button() {
-    // Add a "Size Chart" button above the product details
-    echo '<button id="size_chart_button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location=\'/size-chart\'">Size Chart</button>';
-}
+// // Display extra fields on the product page only if the category matches
+// add_action('woocommerce_before_single_product', 'add_size_chart_button', 5);
+// function add_size_chart_button() {
+//     // Add a "Size Chart" button above the product details
+//     echo '<button id="size_chart_button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location=\'/size-chart\'">Size Chart</button>';
+// }
 
 // Display custom fields on the product page only if the category matches
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
@@ -68,6 +68,9 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
     
+    echo '<button id="size_chart_button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location=\'/size-chart\'">Size Chart</button>';
+
+
     echo '<div class="custom-field">
             <label for="team_name">Front - Team Name:</label>
             <input type="text" id="team_name" name="custom_team_name" />
