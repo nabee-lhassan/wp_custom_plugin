@@ -68,7 +68,20 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
     
-    echo '<button id="size_chart_button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location=\'/size-chart\'">Size Chart</button>';
+    echo '<div class="size-chart-button">
+            <button id="size_chart_button" style="background-color: black; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</button>
+          </div>
+          
+          <script>
+          window.openSizeChartPopup = function() {
+        var popupId = "size_chart"; // Replace with your actual Elementor popup ID
+        if (typeof elementorProFrontend !== "undefined") {
+            elementorProFrontend.modules.popup.showPopup({ id: popupId });
+        }
+    }
+    </script>
+          
+          ';
 
 
     echo '<div class="custom-field">
