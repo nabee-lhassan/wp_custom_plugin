@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.8
+ * Version: 1.9
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -29,23 +29,23 @@ function custom_fields_settings_page() {
     
     $categories = get_terms('product_cat', ['hide_empty' => false]);
     echo '<form method="post">';
-    echo '<ul>';
+    wp_nonce_field('custom_fields_save_action', 'custom_fields_nonce');
+    echo '<label for="custom_fields_category">Select Category:</label>';
+    echo '<select name="custom_fields_category" id="custom_fields_category">';
+    echo '<option value="">Select a Category</option>';
     foreach ($categories as $category) {
-        $checked = get_option('custom_fields_enabled_' . $category->slug) ? 'checked' : '';
-        echo '<li><input type="checkbox" name="custom_fields_enabled[' . esc_attr($category->slug) . ']" ' . $checked . '> ' . esc_html($category->name) . '</li>';
+        $selected = get_option('custom_fields_enabled_category') == $category->slug ? 'selected' : '';
+        echo '<option value="' . esc_attr($category->slug) . '" ' . $selected . '>' . esc_html($category->name) . '</option>';
     }
-    echo '</ul>';
+    echo '</select>';
     submit_button('Save Settings');
     echo '</form>';
     
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        foreach ($categories as $category) {
-            $option_name = 'custom_fields_enabled_' . $category->slug;
-            if (isset($_POST['custom_fields_enabled'][$category->slug])) {
-                update_option($option_name, true);
-            } else {
-                delete_option($option_name);
-            }
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['custom_fields_nonce']) && wp_verify_nonce($_POST['custom_fields_nonce'], 'custom_fields_save_action')) {
+        if (!empty($_POST['custom_fields_category'])) {
+            update_option('custom_fields_enabled_category', sanitize_text_field($_POST['custom_fields_category']));
+        } else {
+            delete_option('custom_fields_enabled_category');
         }
     }
     echo '</div>';
@@ -56,16 +56,9 @@ add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_produc
 function add_custom_fields_to_product_page() {
     global $post;
     $product_cats = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'slugs']);
-    $show_fields = false;
+    $enabled_category = get_option('custom_fields_enabled_category');
     
-    foreach ($product_cats as $cat) {
-        if (get_option('custom_fields_enabled_' . $cat)) {
-            $show_fields = true;
-            break;
-        }
-    }
-    
-    if (!$show_fields) return;
+    if (!in_array($enabled_category, $product_cats)) return;
     
     echo '<div class="custom-field">
             <label for="team_name">Team Name</label>
