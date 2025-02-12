@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 1.6
+ * Version: 1.7
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -64,14 +64,38 @@ function add_custom_fields_to_product_page() {
     if (!$show_fields) return;
     
     echo '<div class="custom-field">
-            <label for="custom_message">Custom Message</label>
-            <input type="text" id="custom_message" name="custom_message" />
+            <label for="team_name">Team Name</label>
+            <input type="text" id="team_name" name="custom_team_name" />
           </div>';
     
     echo '<div class="custom-field">
-            <label for="team_name">Team Name</label>
-            <input type="text" id="team_name" name="team_name" />
-          </div>';
+            <label for="num_players">Select Number of Players</label>
+            <select id="num_players" name="custom_num_players">
+                <option value="">Select</option>';
+    for ($i = 1; $i <= 30; $i++) {
+        echo '<option value="' . $i . '">' . $i . '</option>';
+    }
+    echo '</select></div>';
+    
+    echo '<div id="players_info"></div>';
+    
+    echo '<script>
+    document.getElementById("num_players").addEventListener("change", function() {
+        var count = this.value;
+        var container = document.getElementById("players_info");
+        container.innerHTML = "";
+        for (var i = 1; i <= count; i++) {
+            container.innerHTML += `<div class="player-field">
+                <label>Player ` + i + ` Name</label>
+                <input type="text" name="custom_player_` + i + `_name" />
+                <label>Number</label>
+                <input type="text" name="custom_player_` + i + `_number" />
+                <label>Size</label>
+                <input type="text" name="custom_player_` + i + `_size" />
+            </div>`;
+        }
+    });
+    </script>';
 }
 
 // Save custom fields data in the cart
