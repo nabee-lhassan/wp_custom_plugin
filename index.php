@@ -67,12 +67,6 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<div class="custom-field">
-            <label for="brand_logo">Brand Logo</label>
-            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
-            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
-          </div>';
-    
-    echo '<div class="custom-field">
             <label for="front_shorts_number">Front - Number (Shorts Number):</label>
             <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
           </div>';
@@ -85,6 +79,12 @@ function add_custom_fields_to_product_page() {
     echo '<div class="custom-field">
             <label for="back_number">Back - Number:</label>
             <input type="text" id="back_number" name="custom_back_number" />
+          </div>';
+    
+    echo '<div class="custom-field">
+            <label for="brand_logo">Brand Logo</label>
+            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
+            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
           </div>';
     
     echo '<script>
