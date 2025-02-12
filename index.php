@@ -66,15 +66,6 @@ function add_custom_fields_to_product_page() {
             <input type="text" id="team_name" name="custom_team_name" />
           </div>';
     
-    echo '<div class="custom-field">
-            <label for="num_players">Select Number of Players</label>
-            <select id="num_players" name="custom_num_players">
-                <option value="">Select</option>';
-    for ($i = 1; $i <= 30; $i++) {
-        echo '<option value="' . $i . '">' . $i . '</option>';
-    }
-    echo '</select></div>';
-    
     echo '<div id="players_info"></div>';
     
     // New Fields
