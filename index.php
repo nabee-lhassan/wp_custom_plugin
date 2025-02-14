@@ -52,17 +52,11 @@ function custom_fields_settings_page() {
     }
 }
 
-// Display custom fields on the product page only if the category matches
-add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
-function add_custom_fields_to_product_page() {
-    global $post;
-    $product_cats = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'slugs']);
-    $enabled_category = get_option('custom_fields_enabled_category');
-    
-    if (!in_array($enabled_category, $product_cats)) return;
-    
+// Display Size Chart button before variations
+add_action('woocommerce_before_variations_form', 'add_size_chart_button_before_variants');
+function add_size_chart_button_before_variants() {
     $popup_id = 125; // Replace this with actual Elementor popup ID
-    
+
     echo '<div class="size-chart-button">
             <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer; width: fit-content" onclick="openSizeChartPopup()">Size Chart</div>
           </div>
@@ -74,6 +68,16 @@ function add_custom_fields_to_product_page() {
               }
           }
           </script>';
+}
+
+// Display custom fields on the product page only if the category matches
+add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
+function add_custom_fields_to_product_page() {
+    global $post;
+    $product_cats = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'slugs']);
+    $enabled_category = get_option('custom_fields_enabled_category');
+    
+    if (!in_array($enabled_category, $product_cats)) return;
     
     echo '<div class="custom-field">
             <label for="team_name">Front - Team Name:</label>
