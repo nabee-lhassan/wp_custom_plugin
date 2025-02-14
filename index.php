@@ -137,11 +137,15 @@ function add_custom_fields_to_product_page() {
               });
 
               document.getElementById("standard_btn").addEventListener("click", function() {
+              document.getElementById("shop-now").style.pointerEvents = "auto";
+                  document.getElementById("shop-now").style..cursor = "pointer";
                   document.getElementById("custom_fields_wrapper").style.display = "block";
                   document.getElementById("bespoke_fields").style.display = "none";
               });
 
               document.getElementById("bespoke_btn").addEventListener("click", function() {
+                  document.getElementById("shop-now").style.pointerEvents = "none";
+                  document.getElementById("shop-now").style..cursor = "not-allowed";
                   document.getElementById("custom_fields_wrapper").style.display = "none";
                   document.getElementById("bespoke_fields").style.display = "block";
               });
