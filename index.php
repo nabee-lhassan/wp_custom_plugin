@@ -55,7 +55,7 @@ function custom_fields_settings_page() {
 // Display Size Chart button before variations
 add_action('woocommerce_before_variations_form', 'add_size_chart_button_before_variants');
 function add_size_chart_button_before_variants() {
-    $popup_id = 125; // Replace this with actual Elementor popup ID
+    $popup_id = 5642; // Replace this with actual Elementor popup ID
 
     echo '<div class="size-chart-button">
             <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer; width: fit-content" onclick="openSizeChartPopup()">Size Chart</div>
