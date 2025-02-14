@@ -126,31 +126,40 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<script>
-          document.addEventListener("DOMContentLoaded", function() {
-              document.getElementById("brand_logo").addEventListener("change", function(event) {
-                  var reader = new FileReader();
-                  reader.onload = function(e) {
-                      document.getElementById("brand_logo_preview").src = e.target.result;
-                      document.getElementById("brand_logo_preview").style.display = "block";
-                  };
-                  reader.readAsDataURL(event.target.files[0]);
-              });
+    document.addEventListener("DOMContentLoaded", function() {
+        // Brand Logo Preview
+        document.getElementById("brand_logo").addEventListener("change", function(event) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("brand_logo_preview").src = e.target.result;
+                document.getElementById("brand_logo_preview").style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
 
-              document.getElementById("standard_btn").addEventListener("click", function() {
-              document.getElementById("shop-now").style.pointerEvents = "auto";
-                  document.getElementById("shop-now").style..cursor = "pointer";
-                  document.getElementById("custom_fields_wrapper").style.display = "block";
-                  document.getElementById("bespoke_fields").style.display = "none";
-              });
+        // Get Elements Once
+        let shopNowBtn = document.getElementById("shop-now");
+        let standardBtn = document.getElementById("standard_btn");
+        let bespokeBtn = document.getElementById("bespoke_btn");
 
-              document.getElementById("bespoke_btn").addEventListener("click", function() {
-                  document.getElementById("shop-now").style.pointerEvents = "none";
-                  document.getElementById("shop-now").style..cursor = "not-allowed";
-                  document.getElementById("custom_fields_wrapper").style.display = "none";
-                  document.getElementById("bespoke_fields").style.display = "block";
-              });
-          });
-          </script>';
+        // Standard Button Click
+        standardBtn.addEventListener("click", function() {
+            shopNowBtn.style.pointerEvents = "auto"; // Enable button
+            shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
+            document.getElementById("custom_fields_wrapper").style.display = "block";
+            document.getElementById("bespoke_fields").style.display = "none";
+        });
+
+        // Bespoke Button Click
+        bespokeBtn.addEventListener("click", function() {
+            shopNowBtn.style.pointerEvents = "none"; // Disable button
+            shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
+            document.getElementById("custom_fields_wrapper").style.display = "none";
+            document.getElementById("bespoke_fields").style.display = "block";
+        });
+    });
+</script>
+';
 }
 
 // Save custom fields data in the cart
