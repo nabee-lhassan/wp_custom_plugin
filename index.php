@@ -61,10 +61,10 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
     
-    $popup_id = 125; // Replace this with actual Elementor pop up ID
+    $popup_id = 125; // Replace this with actual Elementor popup ID
     
     echo '<div class="size-chart-button">
-            <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</div>
+            <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer; width: fit-content" onclick="openSizeChartPopup()">Size Chart</div>
           </div>
           
           <script>
@@ -115,36 +115,36 @@ function add_custom_fields_to_product_page() {
           </script>';
 }
 
-// Save custom fields data in the cart
-add_filter('woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2);
-function save_custom_fields_to_cart($cart_item_data, $product_id) {
-    foreach ($_POST as $key => $value) {
-        if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $cart_item_data[$key] = sanitize_text_field($value);
+// Save Brand Logo URL in Cart
+add_filter('woocommerce_add_cart_item_data', 'save_custom_logo_to_cart', 10, 2);
+function save_custom_logo_to_cart($cart_item_data, $product_id) {
+    if (!empty($_FILES['custom_brand_logo']['name'])) {
+        $upload = wp_handle_upload($_FILES['custom_brand_logo'], ['test_form' => false]);
+
+        if (!isset($upload['error'])) {
+            $cart_item_data['custom_brand_logo'] = $upload['url']; // Save File URL
+            WC()->session->set('custom_brand_logo', $upload['url']); // Save in session
         }
     }
     return $cart_item_data;
 }
 
-// Display custom fields in the cart
-add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
-function display_custom_fields_in_cart($item_data, $cart_item) {
-    foreach ($cart_item as $key => $value) {
-        if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
-            $item_data[] = ['name' => $label, 'value' => $value];
-        }
+// Display Brand Logo in Cart
+add_filter('woocommerce_get_item_data', 'display_custom_logo_in_cart', 10, 2);
+function display_custom_logo_in_cart($item_data, $cart_item) {
+    if (!empty($cart_item['custom_brand_logo'])) {
+        $item_data[] = [
+            'name'  => 'Brand Logo',
+            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width:50px;" />'
+        ];
     }
     return $item_data;
 }
 
-// Add custom fields to order
-add_action('woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_order', 10, 4);
-function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
-    foreach ($values as $key => $value) {
-        if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
-            $item->add_meta_data($label, $value);
-        }
+// Save Brand Logo in Order Meta Data
+add_action('woocommerce_checkout_create_order_line_item', 'add_custom_logo_to_order', 10, 4);
+function add_custom_logo_to_order($item, $cart_item_key, $values, $order) {
+    if (!empty($values['custom_brand_logo'])) {
+        $item->add_meta_data('Brand Logo', '<img src="' . esc_url($values['custom_brand_logo']) . '" style="max-width:50px;" />');
     }
 }
