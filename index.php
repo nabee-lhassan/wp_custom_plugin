@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 2.1
+ * Version: 2.2
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  * Domain Path: /languages
@@ -70,7 +70,7 @@ function add_size_chart_button_before_variants() {
           </script>';
 }
 
-// Display custom fields on the product page only if the category matches
+// Display buttons and custom fields on the product page
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
 function add_custom_fields_to_product_page() {
     global $post;
@@ -78,34 +78,45 @@ function add_custom_fields_to_product_page() {
     $enabled_category = get_option('custom_fields_enabled_category');
     
     if (!in_array($enabled_category, $product_cats)) return;
+
+    echo '<div class="custom-field-buttons">
+            <button type="button" id="standard_btn" class="custom-button active">Standard</button>
+            <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
+          </div>';
+
+    echo '<div id="custom_fields_wrapper">
+            <div class="custom-field">
+                <label for="team_name">Front - Team Name:</label>
+                <input type="text" id="team_name" name="custom_team_name" />
+            </div>
+            
+            <div class="custom-field">
+                <label for="front_shorts_number">Front - Number (Shorts Number):</label>
+                <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
+            </div>
+            
+            <div class="custom-field">
+                <label for="back_your_name">Back - Your Name:</label>
+                <input type="text" id="back_your_name" name="custom_back_your_name" />
+            </div>
+            
+            <div class="custom-field">
+                <label for="back_number">Back - Number:</label>
+                <input type="text" id="back_number" name="custom_back_number" />
+            </div>
+            
+            <div class="custom-field">
+                <label for="brand_logo">Brand Logo</label>
+                <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
+                <img id="brand_logo_preview" style="max-width:100px; display:none;" />
+            </div>
+          </div>';
     
-    echo '<div class="custom-field">
-            <label for="team_name">Front - Team Name:</label>
-            <input type="text" id="team_name" name="custom_team_name" />
-          </div>
-          
-          <div class="custom-field">
-            <label for="front_shorts_number">Front - Number (Shorts Number):</label>
-            <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
-          </div>
-          
-          <div class="custom-field">
-            <label for="back_your_name">Back - Your Name:</label>
-            <input type="text" id="back_your_name" name="custom_back_your_name" />
-          </div>
-          
-          <div class="custom-field">
-            <label for="back_number">Back - Number:</label>
-            <input type="text" id="back_number" name="custom_back_number" />
-          </div>
-          
-          <div class="custom-field">
-            <label for="brand_logo">Brand Logo</label>
-            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
-            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
-          </div>
-          
-          <script>
+    echo '<div id="bespoke_fields" style="display:none;">
+            <p>Special Instructions for Bespoke Orders</p>
+          </div>';
+    
+    echo '<script>
           document.addEventListener("DOMContentLoaded", function() {
               document.getElementById("brand_logo").addEventListener("change", function(event) {
                   var reader = new FileReader();
@@ -114,6 +125,16 @@ function add_custom_fields_to_product_page() {
                       document.getElementById("brand_logo_preview").style.display = "block";
                   };
                   reader.readAsDataURL(event.target.files[0]);
+              });
+
+              document.getElementById("standard_btn").addEventListener("click", function() {
+                  document.getElementById("custom_fields_wrapper").style.display = "block";
+                  document.getElementById("bespoke_fields").style.display = "none";
+              });
+
+              document.getElementById("bespoke_btn").addEventListener("click", function() {
+                  document.getElementById("custom_fields_wrapper").style.display = "none";
+                  document.getElementById("bespoke_fields").style.display = "block";
               });
           });
           </script>';
@@ -130,18 +151,6 @@ function save_custom_fields_to_cart($cart_item_data, $product_id) {
     return $cart_item_data;
 }
 
-// Save brand logo in the cart
-add_filter('woocommerce_add_cart_item_data', 'save_brand_logo_to_cart', 10, 2);
-function save_brand_logo_to_cart($cart_item_data, $product_id) {
-    if (!empty($_FILES['custom_brand_logo']['name'])) {
-        $upload = wp_upload_bits($_FILES['custom_brand_logo']['name'], null, file_get_contents($_FILES['custom_brand_logo']['tmp_name']));
-        if (!$upload['error']) {
-            $cart_item_data['custom_brand_logo'] = $upload['url']; // Save file URL
-        }
-    }
-    return $cart_item_data;
-}
-
 // Display custom fields in the cart
 add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
@@ -152,27 +161,6 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
         }
     }
 
-    if (!empty($cart_item['custom_brand_logo'])) {
-        $item_data[] = [
-            'name'  => 'Brand Logo',
-            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width:100px;"/>',
-        ];
-    }
-
     return $item_data;
 }
-
-// Add custom fields to order
-add_action('woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_order', 10, 4);
-function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
-    foreach ($values as $key => $value) {
-        if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
-            $item->add_meta_data($label, $value);
-        }
-    }
-
-    if (!empty($values['custom_brand_logo'])) {
-        $item->add_meta_data('Brand Logo', '<img src="' . esc_url($values['custom_brand_logo']) . '" style="max-width:100px;"/>');
-    }
-}
+?>
