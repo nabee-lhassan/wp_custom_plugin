@@ -113,7 +113,16 @@ function add_custom_fields_to_product_page() {
           </div>';
     
     echo '<div id="bespoke_fields" style="display:none;">
-            <p>Special Instructions for Bespoke Orders</p>
+            <p>There will be a certain additional cost for Bespoke printing</p>
+            <h3>Step 2: Please write your requirements</h3>
+            <p>Bespoke service including:</p>
+            <ol>
+                <li>Change color, pattern or printing position</li>
+                <li>Add sponsor or any custom text</li>
+                <li>3. Replicate your design idea and make your dream jersey.</li>
+
+            </ol>
+            <a href="#"> Get a Quote </a>
           </div>';
     
     echo '<script>
