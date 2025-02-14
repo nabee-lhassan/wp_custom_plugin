@@ -52,7 +52,25 @@ function custom_fields_settings_page() {
     }
 }
 
-// Display buttons and custom fields on the product page
+// Display Size Chart button before variations
+add_action('woocommerce_before_variations_form', 'add_size_chart_button_before_variants');
+function add_size_chart_button_before_variants() {
+    $popup_id = 5642; // Replace this with actual Elementor popup ID
+
+    echo '<div class="size-chart-button">
+            <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer; width: fit-content" onclick="openSizeChartPopup()">Size Chart</div>
+          </div>
+          
+          <script>
+          function openSizeChartPopup() {
+              if (typeof elementorProFrontend !== "undefined") {
+                  elementorProFrontend.modules.popup.showPopup({ id: ' . $popup_id . ' });
+              }
+          }
+          </script>';
+}
+
+// Display custom fields on the product page only if the category matches
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
 function add_custom_fields_to_product_page() {
     global $post;
@@ -60,45 +78,34 @@ function add_custom_fields_to_product_page() {
     $enabled_category = get_option('custom_fields_enabled_category');
     
     if (!in_array($enabled_category, $product_cats)) return;
-
-    echo '<div class="custom-field-buttons">
-            <button type="button" id="standard_btn" class="custom-button active">Standard</button>
-            <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
-          </div>';
-
-    echo '<div id="standard_fields">
-            <div class="custom-field">
-                <label for="team_name">Front - Team Name:</label>
-                <input type="text" id="team_name" name="custom_team_name" />
-            </div>
-            
-            <div class="custom-field">
-                <label for="front_shorts_number">Front - Number (Shorts Number):</label>
-                <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
-            </div>
-            
-            <div class="custom-field">
-                <label for="back_your_name">Back - Your Name:</label>
-                <input type="text" id="back_your_name" name="custom_back_your_name" />
-            </div>
-            
-            <div class="custom-field">
-                <label for="back_number">Back - Number:</label>
-                <input type="text" id="back_number" name="custom_back_number" />
-            </div>
-            
-            <div class="custom-field">
-                <label for="brand_logo">Brand Logo</label>
-                <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
-                <img id="brand_logo_preview" style="max-width:100px; display:none;" />
-            </div>
-          </div>';
-
-    echo '<div class="Bespoke" style="display: none;">
-            <p style="font-weight: bold;">Bespoke customization selected. Please contact support for further details.</p>
-          </div>';
-
-    echo '<script>
+    
+    echo '<div class="custom-field">
+            <label for="team_name">Front - Team Name:</label>
+            <input type="text" id="team_name" name="custom_team_name" />
+          </div>
+          
+          <div class="custom-field">
+            <label for="front_shorts_number">Front - Number (Shorts Number):</label>
+            <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
+          </div>
+          
+          <div class="custom-field">
+            <label for="back_your_name">Back - Your Name:</label>
+            <input type="text" id="back_your_name" name="custom_back_your_name" />
+          </div>
+          
+          <div class="custom-field">
+            <label for="back_number">Back - Number:</label>
+            <input type="text" id="back_number" name="custom_back_number" />
+          </div>
+          
+          <div class="custom-field">
+            <label for="brand_logo">Brand Logo</label>
+            <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
+            <img id="brand_logo_preview" style="max-width:100px; display:none;" />
+          </div>
+          
+          <script>
           document.addEventListener("DOMContentLoaded", function() {
               document.getElementById("brand_logo").addEventListener("change", function(event) {
                   var reader = new FileReader();
@@ -108,39 +115,8 @@ function add_custom_fields_to_product_page() {
                   };
                   reader.readAsDataURL(event.target.files[0]);
               });
-
-              document.getElementById("bespoke_btn").addEventListener("click", function() {
-                  document.getElementById("standard_fields").style.display = "none";
-                  document.querySelector(".Bespoke").style.display = "block";
-                  document.getElementById("standard_btn").classList.remove("active");
-                  this.classList.add("active");
-              });
-
-              document.getElementById("standard_btn").addEventListener("click", function() {
-                  document.getElementById("standard_fields").style.display = "block";
-                  document.querySelector(".Bespoke").style.display = "none";
-                  document.getElementById("bespoke_btn").classList.remove("active");
-                  this.classList.add("active");
-              });
           });
           </script>';
-
-    echo '<style>
-            .custom-field-buttons {
-                margin-bottom: 10px;
-            }
-            .custom-button {
-                background-color: #ddd;
-                padding: 10px;
-                border: none;
-                cursor: pointer;
-                margin-right: 5px;
-            }
-            .custom-button.active {
-                background-color: black;
-                color: white;
-            }
-          </style>';
 }
 
 // Save custom fields data in the cart
@@ -149,6 +125,18 @@ function save_custom_fields_to_cart($cart_item_data, $product_id) {
     foreach ($_POST as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
             $cart_item_data[$key] = sanitize_text_field($value);
+        }
+    }
+    return $cart_item_data;
+}
+
+// Save brand logo in the cart
+add_filter('woocommerce_add_cart_item_data', 'save_brand_logo_to_cart', 10, 2);
+function save_brand_logo_to_cart($cart_item_data, $product_id) {
+    if (!empty($_FILES['custom_brand_logo']['name'])) {
+        $upload = wp_upload_bits($_FILES['custom_brand_logo']['name'], null, file_get_contents($_FILES['custom_brand_logo']['tmp_name']));
+        if (!$upload['error']) {
+            $cart_item_data['custom_brand_logo'] = $upload['url']; // Save file URL
         }
     }
     return $cart_item_data;
@@ -164,6 +152,13 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
         }
     }
 
+    if (!empty($cart_item['custom_brand_logo'])) {
+        $item_data[] = [
+            'name'  => 'Brand Logo',
+            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width:100px;"/>',
+        ];
+    }
+
     return $item_data;
 }
 
@@ -175,5 +170,9 @@ function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
             $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
             $item->add_meta_data($label, $value);
         }
+    }
+
+    if (!empty($values['custom_brand_logo'])) {
+        $item->add_meta_data('Brand Logo', '<img src="' . esc_url($values['custom_brand_logo']) . '" style="max-width:100px;"/>');
     }
 }
