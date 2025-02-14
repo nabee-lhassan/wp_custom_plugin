@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Custom Product Fields
  * Description: Adds custom fields to WooCommerce product pages and captures customer input.
- * Version: 2.2
+ * Version: 2.3
  * Author: Nabeel Hassan
  * Text Domain: woocommerce-custom-fields
  */
@@ -30,6 +30,8 @@ function add_custom_fields_to_product_page() {
             <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
             <img id="brand_logo_preview" style="max-width:100px; display:none;" />
           </div>
+
+          <button type="button" id="custom_add_button" class="button alt">Custom Add to Cart</button>
           
           <script>
           document.addEventListener("DOMContentLoaded", function() {
@@ -41,11 +43,16 @@ function add_custom_fields_to_product_page() {
                   };
                   reader.readAsDataURL(event.target.files[0]);
               });
+
+              // Custom button trigger for add to cart
+              document.getElementById("custom_add_button").addEventListener("click", function() {
+                  document.querySelector("form.cart").submit();
+              });
           });
           </script>';
 }
 
-// Save custom fields to cart (Fix added)
+// Save custom fields to cart
 add_filter('woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2);
 function save_custom_fields_to_cart($cart_item_data, $product_id) {
     if (!empty($_POST['custom_customer_name'])) {
