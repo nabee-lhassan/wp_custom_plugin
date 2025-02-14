@@ -52,13 +52,6 @@ function custom_fields_settings_page() {
     }
 }
 
-// // Display extra fields on the product page only if the category matches
-// add_action('woocommerce_before_single_product', 'add_size_chart_button', 5);
-// function add_size_chart_button() {
-//     // Add a "Size Chart" button above the product details
-//     echo '<button id="size_chart_button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location=\'/size-chart\'">Size Chart</button>';
-// }
-
 // Display custom fields on the product page only if the category matches
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
 function add_custom_fields_to_product_page() {
@@ -68,67 +61,65 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
     
+    $popup_id = 1234; // Replace this with actual Elementor popup ID
+    
     echo '<div class="size-chart-button">
-            <div id="size_chart_button" style="background-color: black; color: white; width: fit-content; padding: 10px 20px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</div>
+            <button id="size_chart_button" style="background-color: black; color: white; padding: 10px 20px; border: none; cursor: pointer;" onclick="openSizeChartPopup()">Size Chart</button>
           </div>
           
           <script>
-          window.openSizeChartPopup = function() {
-        var popupId = "size_chart"; // Replace with your actual Elementor popup ID
-        if (typeof elementorProFrontend !== "undefined") {
-            elementorProFrontend.modules.popup.showPopup({ id: popupId });
-        }
-    }
-    </script>
-          
-          ';
-
-
+          function openSizeChartPopup() {
+              if (typeof elementorProFrontend !== "undefined") {
+                  elementorProFrontend.modules.popup.showPopup({ id: ' . $popup_id . ' });
+              }
+          }
+          </script>';
+    
     echo '<div class="custom-field">
             <label for="team_name">Front - Team Name:</label>
             <input type="text" id="team_name" name="custom_team_name" />
-          </div>';
-    
-    echo '<div class="custom-field">
+          </div>
+          
+          <div class="custom-field">
             <label for="front_shorts_number">Front - Number (Shorts Number):</label>
             <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
-          </div>';
-    
-    echo '<div class="custom-field">
+          </div>
+          
+          <div class="custom-field">
             <label for="back_your_name">Back - Your Name:</label>
             <input type="text" id="back_your_name" name="custom_back_your_name" />
-          </div>';
-    
-    echo '<div class="custom-field">
+          </div>
+          
+          <div class="custom-field">
             <label for="back_number">Back - Number:</label>
             <input type="text" id="back_number" name="custom_back_number" />
-          </div>';
-    
-    echo '<div class="custom-field">
+          </div>
+          
+          <div class="custom-field">
             <label for="brand_logo">Brand Logo</label>
             <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
             <img id="brand_logo_preview" style="max-width:100px; display:none;" />
-          </div>';
-    
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("brand_logo").addEventListener("change", function(event) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById("brand_logo_preview").src = e.target.result;
-                document.getElementById("brand_logo_preview").style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
-    });
-    </script>';
+          </div>
+          
+          <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              document.getElementById("brand_logo").addEventListener("change", function(event) {
+                  var reader = new FileReader();
+                  reader.onload = function(e) {
+                      document.getElementById("brand_logo_preview").src = e.target.result;
+                      document.getElementById("brand_logo_preview").style.display = "block";
+                  };
+                  reader.readAsDataURL(event.target.files[0]);
+              });
+          });
+          </script>';
 }
 
 // Save custom fields data in the cart
 add_filter('woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2);
 function save_custom_fields_to_cart($cart_item_data, $product_id) {
     foreach ($_POST as $key => $value) {
-        if (!empty($value)) {
+        if (!empty($value) && strpos($key, 'custom_') === 0) {
             $cart_item_data[$key] = sanitize_text_field($value);
         }
     }
@@ -140,8 +131,7 @@ add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
     foreach ($cart_item as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            // Remove the 'custom_' prefix from the field label
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));  // Remove 'custom_' and format label
+            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
             $item_data[] = ['name' => $label, 'value' => $value];
         }
     }
@@ -153,8 +143,7 @@ add_action('woocommerce_checkout_create_order_line_item', 'add_custom_fields_to_
 function add_custom_fields_to_order($item, $cart_item_key, $values, $order) {
     foreach ($values as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            // Remove the 'custom_' prefix from the field label
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));  // Remove 'custom_' and format label
+            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
             $item->add_meta_data($label, $value);
         }
     }
