@@ -122,7 +122,7 @@ function add_custom_fields_to_product_page() {
                 <li>3. Replicate your design idea and make your dream jersey.</li>
 
             </ol>
-            <a href="#"> Get a Quote </a>
+            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="#"> Get a Quote </a>
           </div>';
     
     echo '<script>
