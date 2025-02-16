@@ -155,7 +155,7 @@ function add_custom_fields_to_product_page() {
             shopNowBtn.style.pointerEvents = "none"; // Disable button
             shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
             document.getElementById("custom_fields_wrapper").style.display = "none";
-            document.getElementById("bespoke_fields").style.display = "block";
+            document.getElementById("bespoke_fields").style.display = "flex";
         });
     });
 </script>
