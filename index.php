@@ -145,6 +145,8 @@ function add_custom_fields_to_product_page() {
         // Standard Button Click
         standardBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "auto"; // Enable button
+            standardBtn.style.backgroundColor = "black";
+            bespokeBtn.style.backgroundColor = "var( --e-global-color-secondary )";
             shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
             document.getElementById("custom_fields_wrapper").style.display = "flex";
             document.getElementById("bespoke_fields").style.display = "none";
@@ -154,6 +156,8 @@ function add_custom_fields_to_product_page() {
         bespokeBtn.addEventListener("click", function() {
             shopNowBtn.style.display = "none"; // Disable button
             shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
+            standardBtn.style.backgroundColor = "var( --e-global-color-secondary )";
+            bespokeBtn.style.backgroundColor = "black";
             document.getElementById("custom_fields_wrapper").style.display = "none";
             document.getElementById("bespoke_fields").style.display = "block";
         });
