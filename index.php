@@ -209,7 +209,7 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
     if (isset($cart_item['custom_brand_logo']) && !empty($cart_item['custom_brand_logo'])) {
         $item_data[] = [
             'name'  => 'Brand Logo',
-            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>'
+            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>' 
         ];
     }
     
