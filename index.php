@@ -60,6 +60,12 @@ function add_size_chart_button_before_variants() {
     echo '<div class="size-chart-button">
             <div id="size_chart_button" style="background-color: black; color: white; padding: 10px 22px; border: none; cursor: pointer; width: fit-content" onclick="openSizeChartPopup()">Size Chart</div>
           </div>
+          <br>
+
+          <div class="custom-field-buttons">
+            <button type="button" id="standard_btn" class="custom-button active">Standard</button>
+            <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
+          </div>
           
           <script>
           function openSizeChartPopup() {
@@ -79,10 +85,10 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
 
-    echo '<div class="custom-field-buttons">
-            <button type="button" id="standard_btn" class="custom-button active">Standard</button>
-            <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
-          </div>';
+    // echo '<div class="custom-field-buttons">
+    //         <button type="button" id="standard_btn" class="custom-button active">Standard</button>
+    //         <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
+    //       </div>';
 
     echo '<div id="custom_fields_wrapper">
             <div class="custom-field">
