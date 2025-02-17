@@ -152,7 +152,7 @@ function add_custom_fields_to_product_page() {
         standardBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "auto"; // Enable button
             shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
-            document.getElementById("custom_fields_wrapper").style.display = "block";
+            document.getElementById("custom_fields_wrapper").style.display = "flex";
             document.getElementById("bespoke_fields").style.display = "none";
         });
 
