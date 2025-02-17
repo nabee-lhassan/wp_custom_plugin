@@ -120,7 +120,7 @@ function add_custom_fields_to_product_page() {
             <ol>
                 <li>Change color, pattern or printing position</li>
                 <li>Add sponsor or any custom text</li>
-                <li>3. Replicate your design idea and make your dream jersey.</li>
+                <li>Replicate your design idea and make your dream jersey.</li>
             </ol>
             <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="#"> Get a Quote </a>
           </div>';
@@ -153,7 +153,7 @@ function add_custom_fields_to_product_page() {
             groupBtn.style.display = "block";
             popupWrap.style.display = "block";
             variations.style.display = "block";
-             standardBtn.classList.add("active");
+            standardBtn.classList.add("active");
             bespokeBtn.classList.remove("active");
             document.getElementById("custom_fields_wrapper").style.display = "flex";
             document.getElementById("bespoke_fields").style.display = "none";
@@ -167,7 +167,7 @@ function add_custom_fields_to_product_page() {
             groupBtn.style.display = "none";
             popupWrap.style.display = "none";
             variations.style.display = "none";
-             standardBtn.classList.remove("active");
+            standardBtn.classList.remove("active");
             bespokeBtn.classList.add("active");
             document.getElementById("custom_fields_wrapper").style.display = "none";
             document.getElementById("bespoke_fields").style.display = "block";
