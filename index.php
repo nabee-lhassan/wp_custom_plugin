@@ -67,7 +67,12 @@ function add_size_chart_button_before_variants() {
                   elementorProFrontend.modules.popup.showPopup({ id: ' . $popup_id . ' });
               }
           }
-          </script>';
+          </script>
+
+           
+
+
+          ';
 }
 
 // Display buttons and custom fields on the product page
