@@ -134,7 +134,7 @@ function add_custom_fields_to_product_page() {
                 <li>Add sponsor or any custom text</li>
                 <li>Replicate your design idea and make your dream jersey.</li>
             </ol>
-            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="#"> Get a Quote </a>
+            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="https://ayshtech.com/logozfactory/get-a-quote/"> Get a Quote </a>
           </div>';
     
     echo '<script>
@@ -217,13 +217,7 @@ function save_custom_fields_to_cart($cart_item_data, $product_id) {
 // Display custom fields in the cart
 add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
-    // Display the brand logo if available
-    // if (isset($cart_item['custom_brand_logo']) && !empty($cart_item['custom_brand_logo'])) {
-    //     $item_data[] = [
-    //         'name'  => 'Brand Logo ',
-    //         'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>' 
-    //     ];
-    // }
+    
     
     // Display other custom fields data
     foreach ($cart_item as $key => $value) {
