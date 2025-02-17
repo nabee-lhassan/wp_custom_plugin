@@ -220,7 +220,7 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
     // Display the brand logo if available
     if (isset($cart_item['custom_brand_logo']) && !empty($cart_item['custom_brand_logo'])) {
         $item_data[] = [
-            'name'  => 'Brand Logo',
+            'name'  => 'Brand Logo display',
             'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>' 
         ];
     }
@@ -257,7 +257,7 @@ add_action('woocommerce_order_item_meta_end', 'display_custom_fields_in_order_de
 function display_custom_fields_in_order_details($item_id, $item, $order, $product) {
     $brand_logo = $item->get_meta('Brand Logo');
     if ($brand_logo) {
-        echo '<p><strong>Brand Logo dd:</strong><br><img src="' . esc_url($brand_logo) . '" style="max-width: 100px;"></p>';
+        echo '<p><strong>Brand Logo:</strong><br><img src="' . esc_url($brand_logo) . '" style="max-width: 100px;"></p>';
     }
     
     foreach ($item->get_meta_data() as $meta) {
