@@ -152,6 +152,8 @@ function add_custom_fields_to_product_page() {
         standardBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "auto"; // Enable button
             shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
+             standardBtn.classList.add("active");
+            bespokeBtn.classList.remove("active");
             document.getElementById("custom_fields_wrapper").style.display = "flex";
             document.getElementById("bespoke_fields").style.display = "none";
         });
@@ -160,6 +162,8 @@ function add_custom_fields_to_product_page() {
         bespokeBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "none"; // Disable button
             shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
+             standardBtn.classList.remove("active");
+            bespokeBtn.classList.add("active");
             document.getElementById("custom_fields_wrapper").style.display = "none";
             document.getElementById("bespoke_fields").style.display = "block";
         });
