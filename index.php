@@ -107,6 +107,18 @@ function add_custom_fields_to_product_page() {
             </div>
             
             <div class="custom-field">
+                <label for="brand_logo_position">Logo Location</label>
+                <select id="brand_logo_position" name="custom_brand_logo_position">
+                    <option value="LeftSleeve">Left Sleeve</option>
+                    <option value="RightSleeve">Right Sleeve</option>
+                    <option value="LeftChest">Left Chest</option>
+                    <option value="RightChest">Right Chest</option>
+                    <option value="both">Both</option>
+                    <option value="none">None</option>
+                </select>
+            </div>
+
+            <div class="custom-field">
                 <label for="brand_logo">Brand Logo</label>
                 <input type="file" id="brand_logo" name="custom_brand_logo" accept="image/*" />
                 <img id="brand_logo_preview" style="max-width:100px; display:none;" />
@@ -215,9 +227,9 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
     
     // Display other custom fields data
     foreach ($cart_item as $key => $value) {
-        if (strpos($key, 'custom_') === 0 && !empty($value)) {
+        if (strpos($key, 'custom_') === 0) {
             $item_data[] = [
-                'name'  => ucfirst(str_replace('custom_', '', $key)),
+                'name'  => ucfirst(str_replace('_', ' ', substr($key, 7))), // Format the field name
                 'value' => esc_html($value)
             ];
         }
@@ -226,19 +238,31 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
     return $item_data;
 }
 
-// Save custom fields to order meta when an order is placed
-add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_to_order', 10, 2);
-function save_custom_fields_to_order($item, $cart_item_key) {
-    $cart_item = WC()->cart->get_cart_item($cart_item_key);
-    
-    if (isset($cart_item['custom_brand_logo'])) {
-        $item->add_meta_data('Brand Logo', $cart_item['custom_brand_logo']);
+// Save custom fields in the order
+add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_in_order', 10, 4);
+function save_custom_fields_in_order($item, $cart_item_key, $values, $order) {
+    if (isset($values['custom_brand_logo'])) {
+        $item->add_meta_data('Brand Logo', $values['custom_brand_logo']);
     }
-
-    // Add other custom fields to order item meta
-    foreach ($cart_item as $key => $value) {
+    
+    foreach ($values as $key => $value) {
         if (strpos($key, 'custom_') === 0) {
-            $item->add_meta_data(ucfirst(str_replace('custom_', '', $key)), sanitize_text_field($value));
+            $item->add_meta_data(ucfirst(str_replace('_', ' ', substr($key, 7))), $value);
+        }
+    }
+}
+
+// Display custom fields in the order details page
+add_action('woocommerce_order_item_meta_end', 'display_custom_fields_in_order_details', 10, 4);
+function display_custom_fields_in_order_details($item_id, $item, $order, $product) {
+    $brand_logo = $item->get_meta('Brand Logo');
+    if ($brand_logo) {
+        echo '<p><strong>Brand Logo:</strong><br><img src="' . esc_url($brand_logo) . '" style="max-width: 100px;"></p>';
+    }
+    
+    foreach ($item->get_meta_data() as $meta) {
+        if (strpos($meta->key, 'custom_') === 0) {
+            echo '<p><strong>' . esc_html($meta->key) . ':</strong> ' . esc_html($meta->value) . '</p>';
         }
     }
 }
