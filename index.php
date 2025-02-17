@@ -179,9 +179,18 @@ function add_custom_fields_to_product_page() {
 // Save custom fields data in the cart
 add_filter('woocommerce_add_cart_item_data', 'save_custom_fields_to_cart', 10, 2);
 function save_custom_fields_to_cart($cart_item_data, $product_id) {
+    // Save custom fields data (including file uploads) to the cart item data
     foreach ($_POST as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $cart_item_data[$key] = sanitize_text_field($value);
+            if ($key == 'custom_brand_logo' && isset($_FILES['custom_brand_logo'])) {
+                // Handle the file upload for brand logo
+                $logo_url = wp_handle_upload($_FILES['custom_brand_logo'], ['test_form' => false]);
+                if (isset($logo_url['url'])) {
+                    $cart_item_data[$key] = $logo_url['url'];
+                }
+            } else {
+                $cart_item_data[$key] = sanitize_text_field($value);
+            }
         }
     }
     return $cart_item_data;
@@ -192,23 +201,28 @@ add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
     foreach ($cart_item as $key => $value) {
         if (!empty($value) && strpos($key, 'custom_') === 0) {
-            $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
-            $item_data[] = ['name' => $label, 'value' => $value];
+            if ($key == 'custom_brand_logo') {
+                $item_data[] = [
+                    'name' => 'Brand Logo',
+                    'value' => '<img src="' . esc_url($value) . '" style="max-width: 100px;"/>'
+                ];
+            } else {
+                $label = ucfirst(str_replace('_', ' ', substr($key, 7)));
+                $item_data[] = ['name' => $label, 'value' => $value];
+            }
         }
     }
-
     return $item_data;
 }
 
 // Save custom fields in the order
-add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_in_order', 10, 2);
-function save_custom_fields_in_order($item, $cart_item_key) {
-    $custom_fields = WC()->cart->get_cart_item($cart_item_key);
-    
-    foreach ($custom_fields as $key => $value) {
-        if (strpos($key, 'custom_') === 0) {
-            $item->add_meta_data(ucfirst(str_replace('_', ' ', substr($key, 7))), $value);
+add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_in_order', 10, 4);
+function save_custom_fields_in_order($item, $cart_item_key, $values, $order) {
+    foreach ($values as $key => $value) {
+        if (!empty($value) && strpos($key, 'custom_') === 0) {
+            $item->add_meta_data(ucfirst(str_replace('_', ' ', substr($key, 7))), $value, true);
         }
     }
 }
+
 ?>
