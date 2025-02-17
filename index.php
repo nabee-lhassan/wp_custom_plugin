@@ -218,12 +218,12 @@ function save_custom_fields_to_cart($cart_item_data, $product_id) {
 add_filter('woocommerce_get_item_data', 'display_custom_fields_in_cart', 10, 2);
 function display_custom_fields_in_cart($item_data, $cart_item) {
     // Display the brand logo if available
-    if (isset($cart_item['custom_brand_logo']) && !empty($cart_item['custom_brand_logo'])) {
-        $item_data[] = [
-            'name'  => 'Brand Logo display',
-            'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>' 
-        ];
-    }
+    // if (isset($cart_item['custom_brand_logo']) && !empty($cart_item['custom_brand_logo'])) {
+    //     $item_data[] = [
+    //         'name'  => 'Brand Logo ',
+    //         'value' => '<img src="' . esc_url($cart_item['custom_brand_logo']) . '" style="max-width: 100px;"/>' 
+    //     ];
+    // }
     
     // Display other custom fields data
     foreach ($cart_item as $key => $value) {
