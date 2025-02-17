@@ -67,12 +67,7 @@ function add_size_chart_button_before_variants() {
                   elementorProFrontend.modules.popup.showPopup({ id: ' . $popup_id . ' });
               }
           }
-          </script>
-
-           
-
-
-          ';
+          </script>';
 }
 
 // Display buttons and custom fields on the product page
@@ -150,28 +145,20 @@ function add_custom_fields_to_product_page() {
         // Standard Button Click
         standardBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "auto"; // Enable button
-            standardBtn.classList.add("active");
-            bespokeBtn.classList.remove("active");
             shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
-            document.getElementById("custom_fields_wrapper").style.display = "flex";
+            document.getElementById("custom_fields_wrapper").style.display = "block";
             document.getElementById("bespoke_fields").style.display = "none";
         });
 
         // Bespoke Button Click
         bespokeBtn.addEventListener("click", function() {
-            shopNowBtn.style.display = "none"; // Disable button
+            shopNowBtn.style.pointerEvents = "none"; // Disable button
             shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
-            standardBtn.classList.remove("active");
-            bespokeBtn.classList.add("active");
             document.getElementById("custom_fields_wrapper").style.display = "none";
             document.getElementById("bespoke_fields").style.display = "block";
         });
     });
-
-    // var( --e-global-color-secondary )
 </script>
-
-
 ';
 }
 
