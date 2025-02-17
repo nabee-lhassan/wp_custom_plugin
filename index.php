@@ -69,16 +69,7 @@ function add_size_chart_button_before_variants() {
           }
           </script>
 
-           <script>
-	
-document.addEventListener("DOMContentLoaded", function() {
-console.log("variation_image");    
-const variation_image = document.querySelectorAll('.variable-item-contents img');
-    console.log(variation_image);
-});
-
-
-</script>
+           
 
 
           ';
