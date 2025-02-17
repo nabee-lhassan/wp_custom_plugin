@@ -85,11 +85,6 @@ function add_custom_fields_to_product_page() {
     
     if (!in_array($enabled_category, $product_cats)) return;
 
-    // echo '<div class="custom-field-buttons">
-    //         <button type="button" id="standard_btn" class="custom-button active">Standard</button>
-    //         <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
-    //       </div>';
-
     echo '<div id="custom_fields_wrapper">
             <div class="custom-field">
                 <label for="team_name">Front - Team Name:</label>
@@ -126,7 +121,6 @@ function add_custom_fields_to_product_page() {
                 <li>Change color, pattern or printing position</li>
                 <li>Add sponsor or any custom text</li>
                 <li>3. Replicate your design idea and make your dream jersey.</li>
-
             </ol>
             <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="#"> Get a Quote </a>
           </div>';
@@ -179,8 +173,7 @@ function add_custom_fields_to_product_page() {
             document.getElementById("bespoke_fields").style.display = "block";
         });
     });
-</script>
-';
+</script>';
 }
 
 // Save custom fields data in the cart
@@ -205,5 +198,17 @@ function display_custom_fields_in_cart($item_data, $cart_item) {
     }
 
     return $item_data;
+}
+
+// Save custom fields in the order
+add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_in_order', 10, 2);
+function save_custom_fields_in_order($item, $cart_item_key) {
+    $custom_fields = WC()->cart->get_cart_item($cart_item_key);
+    
+    foreach ($custom_fields as $key => $value) {
+        if (strpos($key, 'custom_') === 0) {
+            $item->add_meta_data(ucfirst(str_replace('_', ' ', substr($key, 7))), $value);
+        }
+    }
 }
 ?>
