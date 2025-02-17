@@ -145,6 +145,9 @@ function add_custom_fields_to_product_page() {
 
         // Get Elements Once
         let shopNowBtn = document.getElementById("shop-now");
+        let groupBtn = document.querySelector(".group-button");
+        let popupWrap = document.querySelector(".tbay-button-popup-wrap");
+        let variations = document.querySelector(".variations");
         let standardBtn = document.getElementById("standard_btn");
         let bespokeBtn = document.getElementById("bespoke_btn");
 
@@ -152,6 +155,10 @@ function add_custom_fields_to_product_page() {
         standardBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "auto"; // Enable button
             shopNowBtn.style.cursor = "pointer"; // Corrected cursor issue
+            shopNowBtn.style.display = "block";
+            groupBtn.style.display = "block";
+            popupWrap.style.display = "block";
+            variations.style.display = "block";
              standardBtn.classList.add("active");
             bespokeBtn.classList.remove("active");
             document.getElementById("custom_fields_wrapper").style.display = "flex";
@@ -162,6 +169,10 @@ function add_custom_fields_to_product_page() {
         bespokeBtn.addEventListener("click", function() {
             shopNowBtn.style.pointerEvents = "none"; // Disable button
             shopNowBtn.style.cursor = "not-allowed"; // Corrected cursor issue
+            shopNowBtn.style.display = "none";
+            groupBtn.style.display = "none";
+            popupWrap.style.display = "none";
+            variations.style.display = "none";
              standardBtn.classList.remove("active");
             bespokeBtn.classList.add("active");
             document.getElementById("custom_fields_wrapper").style.display = "none";
