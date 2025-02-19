@@ -92,7 +92,7 @@ function add_custom_fields_to_product_page() {
             </div>
             
             <div class="custom-field">
-                <label for="front_shorts_number"> Player Number </label>
+                <label for="front_shorts_number"> Player Number: </label>
                 <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
             </div>
             
@@ -104,7 +104,7 @@ function add_custom_fields_to_product_page() {
 
             
             <div class="custom-field">
-                <label for="brand_logo_position">Logo Location</label>
+                <label for="brand_logo_position">Logo Location</label> <br>
                 <select id="brand_logo_position" name="custom_brand_logo_position">
                     <option value="LeftSleeve">Left Sleeve</option>
                     <option value="RightSleeve">Right Sleeve</option>
