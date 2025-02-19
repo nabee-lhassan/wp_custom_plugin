@@ -101,10 +101,7 @@ function add_custom_fields_to_product_page() {
                 <input type="text" id="back_your_name" name="custom_back_your_name" />
             </div>
             
-            // <div class="custom-field">
-            //     <label for="back_number">Back - Number:</label>
-            //     <input type="text" id="back_number" name="custom_back_number" />
-            // </div>
+
             
             <div class="custom-field">
                 <label for="brand_logo_position">Logo Location</label>
