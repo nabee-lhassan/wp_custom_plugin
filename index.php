@@ -8,6 +8,15 @@
  * Domain Path: /languages
  */
 
+
+
+
+
+
+
+
+// ********* add menu in dashboard ************
+
 // Add a menu in the WordPress dashboard sidebar
 add_action('admin_menu', 'custom_fields_admin_menu');
 function custom_fields_admin_menu() {
@@ -51,6 +60,12 @@ function custom_fields_settings_page() {
         }
     }
 }
+
+
+
+
+
+// ********* add custom fields ************
 
 // Display Size Chart button before variations
 add_action('woocommerce_before_variations_form', 'add_size_chart_button_before_variants');
