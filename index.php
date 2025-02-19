@@ -92,7 +92,7 @@ function add_custom_fields_to_product_page() {
             </div>
             
             <div class="custom-field">
-                <label for="front_shorts_number">Front - Number (Shorts Number):</label>
+                <label for="front_shorts_number"> Player Number </label>
                 <input type="text" id="front_shorts_number" name="custom_front_shorts_number" />
             </div>
             
