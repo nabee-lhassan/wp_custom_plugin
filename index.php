@@ -171,6 +171,7 @@ function add_custom_fields_to_product_page() {
         let groupBtn = document.querySelector(".group-button");
         let popupWrap = document.querySelector(".tbay-button-popup-wrap");
         let variations = document.querySelector(".variations");
+        let colorpicker = document.querySelector(".custom_colorpicker_wrapper");
         let standardBtn = document.getElementById("standard_btn");
         let bespokeBtn = document.getElementById("bespoke_btn");
 
@@ -182,6 +183,7 @@ function add_custom_fields_to_product_page() {
             groupBtn.style.display = "block";
             popupWrap.style.display = "block";
             variations.style.display = "block";
+            colorpicker.style.display = "block";
             standardBtn.classList.add("active");
             bespokeBtn.classList.remove("active");
             document.getElementById("custom_fields_wrapper").style.display = "flex";
@@ -196,6 +198,7 @@ function add_custom_fields_to_product_page() {
             groupBtn.style.display = "none";
             popupWrap.style.display = "none";
             variations.style.display = "none";
+            colorpicker.style.display = "none";
             standardBtn.classList.remove("active");
             bespokeBtn.classList.add("active");
             document.getElementById("custom_fields_wrapper").style.display = "none";
