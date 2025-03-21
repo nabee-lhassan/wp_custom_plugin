@@ -83,7 +83,7 @@ function add_size_chart_button_before_variants() {
 
           <div class="custom-field-buttons">
             <button type="button" id="standard_btn" class="custom-button active">Standard</button>
-            <button type="button" id="bespoke_btn" class="custom-button">Bespoke button</button>
+            <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
           </div>
           
           <script>
