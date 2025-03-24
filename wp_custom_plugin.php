@@ -115,6 +115,18 @@ function add_custom_fields_to_product_page() {
 
     echo '</div>';
 
+    echo '<div id="bespoke_fields" style="display:none;">
+            <p>There will be a certain additional cost for Bespoke printing</p>
+            <h3>Step 2: Please write your requirements</h3>
+            <p>Bespoke service including:</p>
+            <ol>
+                <li>Change color, pattern or printing position</li>
+                <li>Add sponsor or any custom text</li>
+                <li>Replicate your design idea and make your dream jersey.</li>
+            </ol>
+            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="https://ayshtech.com/logozfactory/get-a-quote/"> Get a Quote </a>
+          </div>';
+
     echo '<script>
     document.addEventListener("DOMContentLoaded", function() {
         let standardBtn = document.getElementById("standard_btn");
@@ -123,6 +135,9 @@ function add_custom_fields_to_product_page() {
         standardBtn.addEventListener("click", function() {
             standardBtn.classList.add("active");
             bespokeBtn.classList.remove("active");
+            if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "flex";}
+            document.querySelector(".custom_colorpicker_wrapper").style.display = "flex";
+            document.querySelector(".variations").style.display = "flex";
             document.getElementById("custom_fields_wrapper").style.display = "flex";
             document.getElementById("bespoke_fields").style.display = "none";
         });
@@ -130,6 +145,9 @@ function add_custom_fields_to_product_page() {
         bespokeBtn.addEventListener("click", function() {
             bespokeBtn.classList.add("active");
             standardBtn.classList.remove("active");
+            if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "none";}
+            document.querySelector(".custom_colorpicker_wrapper").style.display = "none";
+            document.querySelector(".variations").style.display = "none";
             document.getElementById("custom_fields_wrapper").style.display = "none";
             document.getElementById("bespoke_fields").style.display = "block";
         });
@@ -162,7 +180,7 @@ function save_custom_fields_data($cart_item_data, $product_id) {
         if ($movefile && !isset($movefile['error'])) {
             $cart_item_data['custom_brand_logo'] = $movefile['url'];
         }
-    }
+    }   
     return $cart_item_data;
 }
 
