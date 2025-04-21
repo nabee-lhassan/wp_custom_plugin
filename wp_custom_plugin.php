@@ -54,9 +54,9 @@ function custom_fields_settings_page() {
 // Add Size Chart and Buttons Before Variations
 add_action('woocommerce_before_variations_form', 'add_size_chart_and_buttons');
 function add_size_chart_and_buttons() {
-    $popup_id = 5642; // Elementor Popup ID
+    $popup_id = 125; // Elementor Popup ID
     echo '<div style="margin-bottom: 20px;">
-            <button onclick="openSizeChartPopup()" style="background:black; color:white; padding:10px 22px;">Size Chart</button>
+            <div onclick="openSizeChartPopup()" style="background:black; color:white; padding:10px 22px;">Size Chart</div>
           </div>
           <div class="custom-field-buttons">
             <button type="button" id="standard_btn" class="custom-button active">Standard</button>
@@ -65,11 +65,12 @@ function add_size_chart_and_buttons() {
           <script>
             function openSizeChartPopup() {
                 if (typeof elementorProFrontend !== "undefined") {
-                    elementorProFrontend.modules.popup.showPopup({ id: ' . $popup_id . ' });
+                    elementorProFrontend.modules.popup.showPopup({ id: ' . esc_js($popup_id) . ' });
                 }
             }
           </script>';
 }
+
 
 // Show Custom Fields
 add_action('woocommerce_before_add_to_cart_button', 'add_custom_fields_to_product_page');
@@ -180,7 +181,7 @@ function save_custom_fields_data($cart_item_data, $product_id) {
         if ($movefile && !isset($movefile['error'])) {
             $cart_item_data['custom_brand_logo'] = $movefile['url'];
         }
-    }   
+    }
     return $cart_item_data;
 }
 
