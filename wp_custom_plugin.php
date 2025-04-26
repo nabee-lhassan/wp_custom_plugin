@@ -56,9 +56,9 @@ add_action('woocommerce_before_variations_form', 'add_size_chart_and_buttons');
 function add_size_chart_and_buttons() {
     $popup_id = 125; // Elementor Popup ID
     echo '<div style="margin-bottom: 20px;">
-            <div onclick="openSizeChartPopup()" style="background:black; color:white; padding:10px 22px;">Size Chart</div>
+            <div onclick="openSizeChartPopup()" style="background:black; color:white; padding:10px 22px; width:fit-content; cursor:pointer;">Size Chart</div>
           </div>
-          <div class="custom-field-buttons">
+          <div style="margin-bottom: 20px;" class="custom-field-buttons">
             <button type="button" id="standard_btn" class="custom-button active">Standard</button>
             <button type="button" id="bespoke_btn" class="custom-button">Bespoke</button>
           </div>
@@ -79,26 +79,27 @@ function add_custom_fields_to_product_page() {
     $product_cats = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'slugs']);
     $enabled_category = get_option('custom_fields_enabled_category');
     if (!in_array($enabled_category, $product_cats)) return;
-
+    
+    
     echo '<div id="custom_fields_wrapper" >';
 
     echo '<div class="custom-field">
-            <label style="font-weight:bold;">Front - Team Name</label>
+            <label style="font-weight:bold;font-size:20px;">Front - Team Name</label>
             <input type="text" name="custom_team_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
           </div>';
 
     echo '<div class="custom-field">
-            <label style="font-weight:bold;">Player Number</label>
+            <label style="font-weight:bold;font-size:20px;">Player Number</label>
             <input type="text" name="custom_front_shorts_number" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
           </div>';
 
     echo '<div class="custom-field">
-            <label style="font-weight:bold;">Back - Your Name</label>
+            <label style="font-weight:bold;font-size:20px;">Back - Your Name</label>
             <input type="text" name="custom_back_your_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
           </div>';
 
     echo '<div class="custom-field">
-            <label style="font-weight:bold;">Logo Location</label>
+            <label style="font-weight:bold;font-size:20px;">Logo Location</label>
             <select name="custom_brand_logo_position" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
                 <option value="LeftSleeve">Left Sleeve</option>
                 <option value="RightSleeve">Right Sleeve</option>
@@ -110,7 +111,7 @@ function add_custom_fields_to_product_page() {
           </div>';
 
     echo '<div class="custom-field">
-            <label style="font-weight:bold;">Brand Logo</label>
+            <label style="font-weight:bold;font-size:20px;">Brand Logo</label>
             <input type="file" name="custom_brand_logo" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
           </div>';
 
@@ -125,7 +126,7 @@ function add_custom_fields_to_product_page() {
                 <li>Add sponsor or any custom text</li>
                 <li>Replicate your design idea and make your dream jersey.</li>
             </ol>
-            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="https://ayshtech.com/logozfactory/get-a-quote/"> Get a Quote </a>
+            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="' . home_url('/index.php/get-a-quote/') . '"> Get a Quote </a>
           </div>';
 
     echo '<script>
