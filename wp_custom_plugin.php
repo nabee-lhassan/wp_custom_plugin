@@ -81,80 +81,80 @@ function add_custom_fields_to_product_page() {
     if (!in_array($enabled_category, $product_cats)) return;
     
     
-    echo '<div id="custom_fields_wrapper" >';
+    // echo '<div id="custom_fields_wrapper" >';
 
-    echo '<div class="custom-field">
-            <label style="font-weight:bold;font-size:20px;">Front - Team Name</label>
-            <input type="text" name="custom_team_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
-          </div>';
+    // echo '<div class="custom-field">
+    //         <label style="font-weight:bold;font-size:20px;">Front - Team Name</label>
+    //         <input type="text" name="custom_team_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
+    //       </div>';
 
-    echo '<div class="custom-field">
-            <label style="font-weight:bold;font-size:20px;">Player Number</label>
-            <input type="text" name="custom_front_shorts_number" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
-          </div>';
+    // echo '<div class="custom-field">
+    //         <label style="font-weight:bold;font-size:20px;">Player Number</label>
+    //         <input type="text" name="custom_front_shorts_number" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
+    //       </div>';
 
-    echo '<div class="custom-field">
-            <label style="font-weight:bold;font-size:20px;">Back - Your Name</label>
-            <input type="text" name="custom_back_your_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
-          </div>';
+    // echo '<div class="custom-field">
+    //         <label style="font-weight:bold;font-size:20px;">Back - Your Name</label>
+    //         <input type="text" name="custom_back_your_name" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
+    //       </div>';
 
-    echo '<div class="custom-field">
-            <label style="font-weight:bold;font-size:20px;">Logo Location</label>
-            <select name="custom_brand_logo_position" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <option value="LeftSleeve">Left Sleeve</option>
-                <option value="RightSleeve">Right Sleeve</option>
-                <option value="LeftChest">Left Chest</option>
-                <option value="RightChest">Right Chest</option>
-                <option value="both">Both</option>
-                <option value="none">None</option>
-            </select>
-          </div>';
+    // echo '<div class="custom-field">
+    //         <label style="font-weight:bold;font-size:20px;">Logo Location</label>
+    //         <select name="custom_brand_logo_position" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+    //             <option value="LeftSleeve">Left Sleeve</option>
+    //             <option value="RightSleeve">Right Sleeve</option>
+    //             <option value="LeftChest">Left Chest</option>
+    //             <option value="RightChest">Right Chest</option>
+    //             <option value="both">Both</option>
+    //             <option value="none">None</option>
+    //         </select>
+    //       </div>';
 
-    echo '<div class="custom-field">
-            <label style="font-weight:bold;font-size:20px;">Brand Logo</label>
-            <input type="file" name="custom_brand_logo" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
-          </div>';
+    // echo '<div class="custom-field">
+    //         <label style="font-weight:bold;font-size:20px;">Brand Logo</label>
+    //         <input type="file" name="custom_brand_logo" style="padding:8px; border:1px solid #ccc; border-radius:5px;" />
+    //       </div>';
 
-    echo '</div>';
+    // echo '</div>';
 
-    echo '<div id="bespoke_fields" style="display:none;">
-            <p>There will be a certain additional cost for Bespoke printing</p>
-            <h3>Step 2: Please write your requirements</h3>
-            <p>Bespoke service including:</p>
-            <ol>
-                <li>Change color, pattern or printing position</li>
-                <li>Add sponsor or any custom text</li>
-                <li>Replicate your design idea and make your dream jersey.</li>
-            </ol>
-            <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="' . home_url('/index.php/get-a-quote/') . '"> Get a Quote </a>
-          </div>';
+    // echo '<div id="bespoke_fields" style="display:none;">
+    //         <p>There will be a certain additional cost for Bespoke printing</p>
+    //         <h3>Step 2: Please write your requirements</h3>
+    //         <p>Bespoke service including:</p>
+    //         <ol>
+    //             <li>Change color, pattern or printing position</li>
+    //             <li>Add sponsor or any custom text</li>
+    //             <li>Replicate your design idea and make your dream jersey.</li>
+    //         </ol>
+    //         <a style="width:100%;text-align:center; padding: 10px 22px; background-color: black; color: white;" href="' . home_url('/index.php/get-a-quote/') . '"> Get a Quote </a>
+    //       </div>';
 
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let standardBtn = document.getElementById("standard_btn");
-        let bespokeBtn = document.getElementById("bespoke_btn");
+    // echo '<script>
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     let standardBtn = document.getElementById("standard_btn");
+    //     let bespokeBtn = document.getElementById("bespoke_btn");
 
-        standardBtn.addEventListener("click", function() {
-            standardBtn.classList.add("active");
-            bespokeBtn.classList.remove("active");
-            if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "flex";}
-            document.querySelector(".custom_colorpicker_wrapper").style.display = "flex";
-            document.querySelector(".variations").style.display = "flex";
-            document.getElementById("custom_fields_wrapper").style.display = "flex";
-            document.getElementById("bespoke_fields").style.display = "none";
-        });
+    //     standardBtn.addEventListener("click", function() {
+    //         standardBtn.classList.add("active");
+    //         bespokeBtn.classList.remove("active");
+    //         if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "flex";}
+    //         document.querySelector(".custom_colorpicker_wrapper").style.display = "flex";
+    //         document.querySelector(".variations").style.display = "flex";
+    //         document.getElementById("custom_fields_wrapper").style.display = "flex";
+    //         document.getElementById("bespoke_fields").style.display = "none";
+    //     });
 
-        bespokeBtn.addEventListener("click", function() {
-            bespokeBtn.classList.add("active");
-            standardBtn.classList.remove("active");
-            if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "none";}
-            document.querySelector(".custom_colorpicker_wrapper").style.display = "none";
-            document.querySelector(".variations").style.display = "none";
-            document.getElementById("custom_fields_wrapper").style.display = "none";
-            document.getElementById("bespoke_fields").style.display = "block";
-        });
-    });
-    </script>';
+    //     bespokeBtn.addEventListener("click", function() {
+    //         bespokeBtn.classList.add("active");
+    //         standardBtn.classList.remove("active");
+    //         if(document.querySelector("#shop-now")){document.querySelector("#shop-now").style.display = "none";}
+    //         document.querySelector(".custom_colorpicker_wrapper").style.display = "none";
+    //         document.querySelector(".variations").style.display = "none";
+    //         document.getElementById("custom_fields_wrapper").style.display = "none";
+    //         document.getElementById("bespoke_fields").style.display = "block";
+    //     });
+    // });
+    // </script>';
 }
 
 // Save Custom Field Data to Cart
